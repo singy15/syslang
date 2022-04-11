@@ -42,9 +42,13 @@ let $system = {
           },
           $steps: {
             $list: [
-              `var model = new #DOMAIN_SALE.$models.SALE()`,
-              `copyTo(@VIEW,model)`,
-              `#DOMAIN_SALE.$ios.INSERT_SALE(model)`
+              `(use-package #DOMAIN_SALE)`
+              //`var model = new #DOMAIN_SALE.$models.SALE()`,
+              `(define model (new #.$models.SALE))`
+              //`copyTo(@VIEW,model)`,
+              `(copy-to @VIEW model)`
+              //`#DOMAIN_SALE.$ios.INSERT_SALE(model)`
+              `(#.$ios.INSERT_SALE model)`
             ]
           }
         }
