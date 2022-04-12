@@ -32,6 +32,10 @@ let $system = {
               type: DataType.Number,
               label: "金額"
             },
+            REGISTER: {
+              type: ViewItemType.Button,
+              label: "登録",
+            }
           },
         }
       },
@@ -42,13 +46,13 @@ let $system = {
           },
           $steps: {
             $list: [
-              `(use-package #DOMAIN_SALE)`
+              `(use-package #DOMAIN_SALE)`,
               //`var model = new #DOMAIN_SALE.$models.SALE()`,
-              `(define model (new #.$models.SALE))`
+              `(define model (new #.$models.SALE))`,
               //`copyTo(@VIEW,model)`,
-              `(copy-to @VIEW model)`
-              //`#DOMAIN_SALE.$ios.INSERT_SALE(model)`
-              `(#.$ios.INSERT_SALE model)`
+              `(copy-to @VIEW model)`,
+              //`#DOMAIN_SALE.$ios.INSERT_SALE(model)`,
+              `(#.$ios.INSERT_SALE model)`,
             ]
           }
         }
