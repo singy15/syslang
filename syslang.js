@@ -1,35 +1,49 @@
-let DataType = {
-  DateTime: 1,
-  Text: 2,
-  Number: 3
-};
 
-let IOType = {
-  DB: 1,
-  File: 2,
-  Model: 3
-};
+function val(expr, root) {
+  let cur = root;
+  let paths = expr.substr(1).split(".");
+  for(var i = 0; i < paths.length; i++) {
+    cur = root[paths[i]];
+  }
+  return cur;
+}
 
 let $system = {
+  VIEW_COMPONENT_TYPE: {
+    DATETIMEPICKER: "VIEW_COMPONENT_TYPE.DATETIMEPICKER",
+    TEXTBOX: "VIEW_COMPONENT_TYPE.TEXTBOX",
+    NUMBERBOX: "VIEW_COMPONENT_TYPE.NUMBERBOX",
+    BUTTON: "VIEW_COMPONENT_TYPE.BUTTON",
+  },
+  DATA_TYPE: {
+    DATETIME: "DATA_TYPE.DATETIME",
+    TEXT: "DATA_TYPE.TEXT",
+    NUMBER: "DATA_TYPE.NUMBER",
+  },
+  IO_TYPE: {
+    DB: "IO_TYPE.DB",
+    FILE: "IO_TYPE.FILE",
+    MODEL: "IO_TYPE.MODEL",
+  },
   $packages: {
     SALE: {
       $views: {
         REGISTER_SALE: {
           $viewItems: {
             SALE_NO: {
-              type: DataType.Number,
+              type: "#VIEW_COMPONENT_TYPE.NUMBERBOX"
               label: "発行日"
             },
             ISSUE_DATE: {
-              type: DataType.DateTime,
+              type: "#VIEW_COMPONENT_TYPE.DATETIMEPICKER",
               label: "発行日"
             },
             DESCRIPTION: {
-              type: DataType.Text,
+              type: "#VIEW_COMPONENT_TYPE.TEXTBOX",
               label: "摘要"
             },
             AMOUNT: {
-              type: DataType.Number,
+              type: "#VIEW_COMPONENT_TYPE.NUMBERBOX",
               label: "金額"
             },
           },
@@ -38,17 +52,14 @@ let $system = {
       $processes: {
         REGISTER: {
           $params: {
-            VIEW: ref(`#SALE.$views.REGISTER_SALE`)
+            VIEW: "#SALE.$views.REGISTER_SALE"
           },
           $steps: {
             $list: [
-              `(use-package #DOMAIN_SALE)`
-              //`var model = new #DOMAIN_SALE.$models.SALE()`,
-              `(define model (new #.$models.SALE))`
-              //`copyTo(@VIEW,model)`,
-              `(copy-to @VIEW model)`
-              //`#DOMAIN_SALE.$ios.INSERT_SALE(model)`
-              `(#.$ios.INSERT_SALE model)`
+              "(use-package #DOMAIN_SALE)",
+              "(define model (new #.$models.SALE))",
+              "(copy-to @VIEW model)",
+              "(#.$ios.INSERT_SALE model)",
             ]
           }
         }
@@ -57,28 +68,28 @@ let $system = {
     DOMAIN_SALE: {
       $ios: {
         INSERT_SALE: {
-          type: IOType.DB,
+          type: "#IO_TYPE.DB",
           $params: {
             MODEL: {
-              type: ref(`#DOMAIN_SALE.$models.SALE`)
+              type: "#DOMAIN_SALE.$models.SALE"
             }
           },
-          sql: `INSERT INTO SALE (SALE_NO,ISSUE_DATE,DESCRIPTION,AMOUNT) VALUES (@MODEL.SALE_NO,@MODEL.ISSUE_DATE,@MODEL.DESCRIPTION,@MODEL.AMOUNT)`
+          sql: "INSERT INTO SALE (SALE_NO,ISSUE_DATE,DESCRIPTION,AMOUNT) VALUES (@MODEL.SALE_NO,@MODEL.ISSUE_DATE,@MODEL.DESCRIPTION,@MODEL.AMOUNT)"
         }
       },
       $models: {
         SALE: {
           SALE_NO: {
-            type: DataType.Number
+            type: "#DATA_TYPE.NUMBER"
           },
           ISSUE_DATE: {
-            type: DataType.DateTime,
+            type: "#DATA_TYPE.DATETIME"
           },
           DESCRIPTION: {
-            type: DataType.Text,
+            type: "#DATA_TYPE.TEXT"
           },
           AMOUNT: {
-            type: DataType.Number,
+            type: "#DATA_TYPE.NUMBER"
           },
         }
       }
