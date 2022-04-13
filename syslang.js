@@ -31,7 +31,7 @@ let $system = {
         REGISTER_SALE: {
           $viewItems: {
             SALE_NO: {
-              type: "#VIEW_COMPONENT_TYPE.NUMBERBOX"
+              type: "#VIEW_COMPONENT_TYPE.NUMBERBOX",
               label: "発行日"
             },
             ISSUE_DATE: {
